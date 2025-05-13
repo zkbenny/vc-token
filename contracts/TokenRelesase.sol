@@ -29,19 +29,18 @@ contract TokenRelease is OwnableUpgradeable, UUPSUpgradeable, ReentrancyGuardUpg
         uint256 releasePerSecond;
     }
 
-    IERC20 public releaseToken;
+    IERC20 public immutable releaseToken;
     mapping(address user => Plan) public userPlans;
 
-    constructor() {
+    constructor(IERC20 _releaseToken) {
         _disableInitializers();
+        releaseToken = _releaseToken;
     }
 
-    function initialize(IERC20 _releaseToken) external initializer {
+    function initialize() external initializer {
         __Ownable_init_unchained(msg.sender);
         __UUPSUpgradeable_init_unchained();
         __ReentrancyGuard_init_unchained();
-
-        releaseToken = _releaseToken;
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
